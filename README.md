@@ -1,39 +1,166 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# YT Search API Wrapper
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+A powerful, high-performance Dart and Flutter package for fetching YouTube metadata, trending videos, related recommendations, and searching for videos, playlists, and channels using the [YT App API](https://yt-app-api.vercel.app/docs.html).
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+## ✨ Features
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+- 🔍 **Powerful Search**: Search videos, playlists, channels, and live streams with filters and pagination.
+- 🔥 **Trending**: Fetch trending videos by category (Music, Gaming, etc.) and region.
+- 🔗 **Related Recommendations**: Get high-quality video recommendations for any YouTube video.
+- 📦 **Full Metadata**: Comprehensive information for videos, playlists, and channels.
+- ⚡ **Performance**: Optimized for speed with pagination support and localized IP options.
+- 🛠️ **Polymorphic Parsing**: Uses Dart Sealed Classes for effortless and type-safe results.
 
-## Features
+---
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## 🚀 Installation
 
-## Getting started
+Add the following to your `pubspec.yaml` to use it via GitHub:
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
+```yaml
+dependencies:
+  yt_search:
+    git:
+      url: https://github.com/CasuallyEpic/yt-search.git
+      ref: main
 ```
 
-## Additional information
+Run `flutter pub get` or `dart pub get` to fetch the package.
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+---
+
+## 🏗️ Getting Started
+
+Import the package and initialize the `YTSearchClient`:
+
+```dart
+import 'package:yt_search/yt_search.dart';
+
+void main() async {
+  final client = YTSearchClient();
+  // Ready to use!
+}
+```
+
+---
+
+## 📖 API Reference
+
+### 1. `search`
+Search for videos, playlists, channels, and more.
+
+```dart
+SearchResult result = await client.search(
+  'flutter',
+  page: 1,           // Optional page number
+  type: 'video',     // Optional (video, playlist, channel, live, all)
+  ip: '1.1.1.1',     // Optional for localized results
+);
+
+// Accessing results
+print(result.query);
+print(result.resultsCount);
+print(result.videos.first.title);
+```
+
+### 2. `getTrending`
+Fetch current trending videos on YouTube.
+
+```dart
+TrendingResponse trending = await client.getTrending(
+  category: 'music', // Optional (music, gaming, etc.)
+  country: 'IN',     // Optional ISO country code
+  page: 1,           // Optional page number
+);
+
+print(trending.category);
+print(trending.videos.first.title);
+```
+
+### 3. `getRelated`
+Get video recommendations (More like this).
+
+```dart
+RelatedResponse related = await client.getRelated(
+  'videoIdhere',
+  page: 1,           // Optional page number
+  ip: '1.1.1.1',     // Optional for localization
+);
+
+print(related.originalVideo['title']);
+print(related.recommendations.first.title);
+```
+
+### 4. `getVideoDetail`
+Fetch all metadata for a specific YouTube video.
+
+```dart
+VideoDetail video = await client.getVideoDetail('videoIdhere');
+
+print(video.title);
+print(video.description);
+print(video.author.name);
+print(video.views);
+```
+
+### 5. `getPlaylistDetail`
+Fetch metadata and all videos from a playlist.
+
+```dart
+PlaylistDetail playlist = await client.getPlaylistDetail(
+  'playlistIdhere',
+  page: 1,           // Optional page number
+);
+
+print(playlist.title);
+print(playlist.totalVideoCount);
+print(playlist.videos.first.title);
+```
+
+### 6. `getChannelDetail`
+Fetch high-quality channel metadata.
+
+```dart
+ChannelDetail channel = await client.getChannelDetail('channelIdOrQuery');
+
+print(channel.name);
+print(channel.thumbnail);
+print(channel.url);
+```
+
+---
+
+## 📂 Models
+
+This package uses **Polymorphic Sealed Classes** for type safety. The search results and common items are structured as following:
+
+- **MediaItem**: Base class for all items.
+  - **VideoItem**: A standard YouTube video.
+  - **PlaylistItem**: A YouTube playlist.
+  - **ChannelItem**: A YouTube channel.
+  - **LiveItem**: A live stream result.
+
+You can use `switch` with these types easily:
+
+```dart
+for (var item in searchResult.all) {
+  switch (item) {
+    case VideoItem v: print("Video: ${v.title}");
+    case PlaylistItem p: print("Playlist: ${p.title}");
+    case ChannelItem c: print("Channel: ${c.name}");
+    case LiveItem l: print("Live: ${l.status}");
+  }
+}
+```
+
+---
+
+## 🛠️ Debugging & Maintenance
+
+The package includes a collection of inspection scripts in the `scratch/` folder to test API responses locally if you modify the library source code.
+
+---
+
+## 📄 License
+
+This package is licensed under the MIT License.
