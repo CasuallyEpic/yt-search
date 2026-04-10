@@ -155,9 +155,40 @@ for (var item in searchResult.all) {
 
 ---
 
-## 🛠️ Debugging & Maintenance
+## 🏗️ Workflows
 
-The package includes a collection of inspection scripts in the `scratch/` folder to test API responses locally if you modify the library source code.
+To ensure the library remains stable and clean, follow these common maintenance workflows:
+
+### 1. Verification (Local Testing)
+Before pushing any changes to the library, use the built-in scratchpad scripts to verify API responses:
+```bash
+# Test all major endpoints
+dart scratch/test_api.dart
+
+# Inspect raw JSON for specific endpoints
+dart scratch/inspect_search.dart
+dart scratch/inspect_trending.dart
+```
+
+### 2. Formatting & Linting
+Always format your code and check for issues before committing:
+```bash
+# Format the entire codebase
+dart format .
+
+# Check for static analysis issues
+dart analyze
+
+# Automatically fix common issues/lints
+dart fix --apply
+```
+
+### 3. CI/CD (GitHub Actions)
+This repository is configured with a GitHub Action that automatically triggers on every push to `main`. It performs the following:
+- 🛠️ **Setup Dart SDK**
+- 📦 **Fetch Dependencies** (`pub get`)
+- 🔍 **Static Analysis** (`dart analyze`)
+- 🧪 **Unit Tests** (`dart test`)
 
 ---
 
