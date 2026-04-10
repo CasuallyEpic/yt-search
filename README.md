@@ -25,7 +25,7 @@ dependencies:
       ref: main
 ```
 
-Run `flutter pub get` or `dart pub get` to fetch the package.
+Run `flutter pub get` to fetch the package.
 
 ---
 
@@ -163,21 +163,21 @@ To ensure the library remains stable and clean, follow these common maintenance 
 Before pushing any changes to the library, use the built-in scratchpad scripts to verify API responses:
 ```bash
 # Test all major endpoints
-dart scratch/test_api.dart
+flutter pub run scratch/test_api.dart
 
 # Inspect raw JSON for specific endpoints
-dart scratch/inspect_search.dart
-dart scratch/inspect_trending.dart
+flutter pub run scratch/inspect_search.dart
+flutter pub run scratch/inspect_trending.dart
 ```
 
 ### 2. Formatting & Linting
 Always format your code and check for issues before committing:
 ```bash
 # Format the entire codebase
-dart format .
+flutter format .
 
 # Check for static analysis issues
-dart analyze
+flutter analyze
 
 # Automatically fix common issues/lints
 dart fix --apply
@@ -185,10 +185,10 @@ dart fix --apply
 
 ### 3. CI/CD (GitHub Actions)
 This repository is configured with a GitHub Action that automatically triggers on every push to `main`. It performs the following:
-- 🛠️ **Setup Dart SDK**
-- 📦 **Fetch Dependencies** (`pub get`)
-- 🔍 **Static Analysis** (`dart analyze`)
-- 🧪 **Unit Tests** (`dart test`)
+- 🛠️ **Setup Flutter SDK**
+- 📦 **Fetch Dependencies** (`flutter pub get`)
+- 🔍 **Static Analysis** (`flutter analyze`)
+- 🧪 **Unit Tests** (`flutter test`)
 
 ---
 
