@@ -170,16 +170,16 @@ class SearchResult {
       page: json['page'] as int? ?? 1,
       typeRequested: json['typeRequested'] as String,
       resultsCount: json['resultsCount'] as int,
-      videos:
-          (results['videos'] as List).map((v) => VideoItem.fromJson(v)).toList(),
+      videos: (results['videos'] as List)
+          .map((v) => VideoItem.fromJson(v))
+          .toList(),
       playlists: (results['playlists'] as List)
           .map((p) => PlaylistItem.fromJson(p))
           .toList(),
       channels: (results['channels'] as List)
           .map((c) => ChannelItem.fromJson(c))
           .toList(),
-      live:
-          (results['live'] as List).map((l) => LiveItem.fromJson(l)).toList(),
+      live: (results['live'] as List).map((l) => LiveItem.fromJson(l)).toList(),
       all: (json['all'] as List).map((i) => MediaItem.fromJson(i)).toList(),
       ip: json['ip'] as String?,
     );
@@ -368,8 +368,9 @@ class TrendingResponse {
       country: json['country'] as String? ?? '',
       page: json['page'] as int? ?? 1,
       resultsCount: json['resultsCount'] as int? ?? 0,
-      videos:
-          (json['videos'] as List).map((v) => VideoItem.fromJson(v)).toList(),
+      videos: (json['videos'] as List)
+          .map((v) => VideoItem.fromJson(v))
+          .toList(),
       ip: json['ip'] as String?,
     );
   }

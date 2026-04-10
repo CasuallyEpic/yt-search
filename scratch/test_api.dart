@@ -23,8 +23,11 @@ void main() async {
 
   print('\n--- Testing Trending ---');
   try {
-    final trending =
-        await client.getTrending(category: 'music', country: 'IN', page: 1);
+    final trending = await client.getTrending(
+      category: 'music',
+      country: 'IN',
+      page: 1,
+    );
     print('Category: ${trending.category}');
     if (trending.videos.isNotEmpty) {
       print('First Trending Video: ${trending.videos.first.title}');
@@ -54,7 +57,9 @@ void main() async {
 
   print('\n--- Testing Playlist Detail ---');
   try {
-    final playlist = await client.getPlaylistDetail('PLjVLYmrlmjGfGLShoW0vVX_tcyT8u1Y3E');
+    final playlist = await client.getPlaylistDetail(
+      'PLjVLYmrlmjGfGLShoW0vVX_tcyT8u1Y3E',
+    );
     print('Playlist Title: ${playlist.title}');
     print('Total Video Count: ${playlist.totalVideoCount}');
     print('Results Count on this page: ${playlist.resultsCount}');
