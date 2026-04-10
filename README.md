@@ -174,7 +174,7 @@ flutter pub run scratch/inspect_trending.dart
 Always format your code and check for issues before committing:
 ```bash
 # Format the entire codebase
-flutter format .
+dart format .
 
 # Check for static analysis issues
 flutter analyze
