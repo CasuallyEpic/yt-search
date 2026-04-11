@@ -19,8 +19,8 @@ class YTSearchClient {
     final params = {
       'q': query,
       if (page != null) 'page': page.toString(),
-      'type': ?type,
-      'ip': ?ip,
+      if (type != null) 'type': type,
+      if (ip != null) 'ip': ip,
     };
     final uri = Uri.parse('$_baseUrl/search').replace(queryParameters: params);
     final response = await http.get(uri);
@@ -44,10 +44,10 @@ class YTSearchClient {
     String? ip,
   }) async {
     final params = {
-      'category': ?category,
+      if (category != null) 'category': category,
       if (page != null) 'page': page.toString(),
-      'country': ?country,
-      'ip': ?ip,
+      if (country != null) 'country': country,
+      if (ip != null) 'ip': ip,
     };
     final uri = Uri.parse(
       '$_baseUrl/trending',
@@ -65,15 +65,17 @@ class YTSearchClient {
   /// [videoId] - The ID of the video to get recommendations for.
   /// [page] - Optional page number for pagination.
   /// [ip] - Optional IP address for localized results.
-  Future<RelatedResponse> getRelated(
-    String videoId, {
+  Future<RelatedResponse> getRelated({
+    String? videoId,
+    String? url,
     int? page,
     String? ip,
   }) async {
     final params = {
-      'id': videoId,
+      if (videoId != null) 'id': videoId,
+      if (url != null) 'url': url,
       if (page != null) 'page': page.toString(),
-      'ip': ?ip,
+      if (ip != null) 'ip': ip,
     };
     final uri = Uri.parse('$_baseUrl/related').replace(queryParameters: params);
     final response = await http.get(uri);
@@ -86,10 +88,14 @@ class YTSearchClient {
   }
 
   /// Get full metadata for a specific video.
-  Future<VideoDetail> getVideoDetail(String videoId) async {
-    final uri = Uri.parse(
-      '$_baseUrl/video',
-    ).replace(queryParameters: {'id': videoId});
+  /// [videoId] - Optional video ID.
+  /// [url] - Optional full YouTube URL.
+  Future<VideoDetail> getVideoDetail({String? videoId, String? url}) async {
+    final params = {
+      if (videoId != null) 'id': videoId,
+      if (url != null) 'url': url,
+    };
+    final uri = Uri.parse('$_baseUrl/video').replace(queryParameters: params);
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
@@ -100,19 +106,20 @@ class YTSearchClient {
   }
 
   /// Fetch all videos and metadata for a playlist.
-  /// [playlistId] - The ID of the playlist.
+  /// [playlistId] - Optional playlist ID.
+  /// [url] - Optional full YouTube URL.
   /// [page] - Optional page number for pagination.
-  Future<PlaylistDetail> getPlaylistDetail(
-    String playlistId, {
+  Future<PlaylistDetail> getPlaylistDetail({
+    String? playlistId,
+    String? url,
     int? page,
   }) async {
     final params = {
-      'id': playlistId,
+      if (playlistId != null) 'id': playlistId,
+      if (url != null) 'url': url,
       if (page != null) 'page': page.toString(),
     };
-    final uri = Uri.parse(
-      '$_baseUrl/playlist',
-    ).replace(queryParameters: params);
+    final uri = Uri.parse('$_baseUrl/playlist').replace(queryParameters: params);
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
@@ -124,11 +131,15 @@ class YTSearchClient {
     }
   }
 
-  /// Fetch channel metadata using a query or ID.
-  Future<ChannelDetail> getChannelDetail(String queryOrId) async {
-    final uri = Uri.parse(
-      '$_baseUrl/channel',
-    ).replace(queryParameters: {'query': queryOrId});
+  /// Fetch channel metadata using a query, ID, or full handle URL.
+  /// [queryOrId] - Optional query or channel ID.
+  /// [url] - Optional full channel URL.
+  Future<ChannelDetail> getChannelDetail({String? queryOrId, String? url}) async {
+    final params = {
+      if (queryOrId != null) 'query': queryOrId,
+      if (url != null) 'url': url,
+    };
+    final uri = Uri.parse('$_baseUrl/channel').replace(queryParameters: params);
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {

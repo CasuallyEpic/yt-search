@@ -164,23 +164,30 @@ class SearchResult {
   });
 
   factory SearchResult.fromJson(Map<String, dynamic> json) {
-    final results = json['results'] as Map<String, dynamic>;
+    final results = json['results'] as Map<String, dynamic>? ?? {};
     return SearchResult(
-      query: json['query'] as String,
+      query: json['query'] as String? ?? '',
       page: json['page'] as int? ?? 1,
-      typeRequested: json['typeRequested'] as String,
-      resultsCount: json['resultsCount'] as int,
-      videos: (results['videos'] as List)
-          .map((v) => VideoItem.fromJson(v))
-          .toList(),
-      playlists: (results['playlists'] as List)
-          .map((p) => PlaylistItem.fromJson(p))
-          .toList(),
-      channels: (results['channels'] as List)
-          .map((c) => ChannelItem.fromJson(c))
-          .toList(),
-      live: (results['live'] as List).map((l) => LiveItem.fromJson(l)).toList(),
-      all: (json['all'] as List).map((i) => MediaItem.fromJson(i)).toList(),
+      typeRequested: json['typeRequested'] as String? ?? 'all',
+      resultsCount: json['resultsCount'] as int? ?? 0,
+      videos: (results['videos'] as List?)
+              ?.map((v) => VideoItem.fromJson(v))
+              .toList() ??
+          [],
+      playlists: (results['playlists'] as List?)
+              ?.map((p) => PlaylistItem.fromJson(p))
+              .toList() ??
+          [],
+      channels: (results['channels'] as List?)
+              ?.map((c) => ChannelItem.fromJson(c))
+              .toList() ??
+          [],
+      live: (results['live'] as List?)
+              ?.map((l) => LiveItem.fromJson(l))
+              .toList() ??
+          [],
+      all: (json['all'] as List?)?.map((i) => MediaItem.fromJson(i)).toList() ??
+          [],
       ip: json['ip'] as String?,
     );
   }
@@ -233,19 +240,21 @@ class VideoDetail {
 
   factory VideoDetail.fromJson(Map<String, dynamic> json) {
     return VideoDetail(
-      type: json['type'] as String,
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      url: json['url'] as String,
-      thumbnail: json['thumbnail'] as String,
-      seconds: json['seconds'] as int,
-      duration: json['duration'] as String,
-      views: json['views'] as int,
-      genre: json['genre'] as String,
-      uploadDate: json['uploadDate'] as String,
-      ago: json['ago'] as String,
-      author: AuthorModel.fromJson(json['author']),
+      type: json['type'] as String? ?? 'video',
+      id: json['id'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      url: json['url'] as String? ?? '',
+      thumbnail: json['thumbnail'] as String? ?? '',
+      seconds: json['seconds'] as int? ?? 0,
+      duration: json['duration'] as String? ?? '',
+      views: json['views'] as int? ?? 0,
+      genre: json['genre'] as String? ?? '',
+      uploadDate: json['uploadDate'] as String? ?? '',
+      ago: json['ago'] as String? ?? '',
+      author: json['author'] != null
+          ? AuthorModel.fromJson(json['author'])
+          : AuthorModel(name: 'Unknown', url: ''),
     );
   }
 }
@@ -303,18 +312,21 @@ class PlaylistDetail {
 
   factory PlaylistDetail.fromJson(Map<String, dynamic> json) {
     return PlaylistDetail(
-      type: json['type'] as String,
-      id: json['id'] as String,
-      title: json['title'] as String,
-      url: json['url'] as String,
-      thumbnail: json['thumbnail'] as String,
+      type: json['type'] as String? ?? 'playlist',
+      id: json['id'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      url: json['url'] as String? ?? '',
+      thumbnail: json['thumbnail'] as String? ?? '',
       totalVideoCount: json['totalVideoCount'] as int? ?? 0,
       resultsCount: json['resultsCount'] as int? ?? 0,
       page: json['page'] as int? ?? 1,
-      author: AuthorModel.fromJson(json['author']),
-      videos: (json['videos'] as List)
-          .map((v) => PlaylistVideo.fromJson(v))
-          .toList(),
+      author: json['author'] != null
+          ? AuthorModel.fromJson(json['author'])
+          : AuthorModel(name: 'Unknown', url: ''),
+      videos: (json['videos'] as List?)
+              ?.map((v) => PlaylistVideo.fromJson(v))
+              .toList() ??
+          [],
     );
   }
 }
@@ -364,13 +376,14 @@ class TrendingResponse {
 
   factory TrendingResponse.fromJson(Map<String, dynamic> json) {
     return TrendingResponse(
-      category: json['category'] as String,
+      category: json['category'] as String? ?? 'general',
       country: json['country'] as String? ?? '',
       page: json['page'] as int? ?? 1,
       resultsCount: json['resultsCount'] as int? ?? 0,
-      videos: (json['videos'] as List)
-          .map((v) => VideoItem.fromJson(v))
-          .toList(),
+      videos: (json['videos'] as List?)
+              ?.map((v) => VideoItem.fromJson(v))
+              .toList() ??
+          [],
       ip: json['ip'] as String?,
     );
   }
@@ -391,10 +404,11 @@ class RelatedResponse {
 
   factory RelatedResponse.fromJson(Map<String, dynamic> json) {
     return RelatedResponse(
-      originalVideo: json['originalVideo'] as Map<String, dynamic>,
-      recommendations: (json['recommendations'] as List)
-          .map((v) => VideoItem.fromJson(v))
-          .toList(),
+      originalVideo: json['originalVideo'] as Map<String, dynamic>? ?? {},
+      recommendations: (json['recommendations'] as List?)
+              ?.map((v) => VideoItem.fromJson(v))
+              .toList() ??
+          [],
       page: json['page'] as int? ?? 1,
       ip: json['ip'] as String?,
     );

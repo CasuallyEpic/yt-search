@@ -38,7 +38,7 @@ void main() async {
 
   print('\n--- Testing Related ---');
   try {
-    final related = await client.getRelated('lHhRhPV--G0');
+    final related = await client.getRelated(videoId: 'lHhRhPV--G0');
     print('Original Video: ${related.originalVideo['title']}');
     print('First Recommendation: ${related.recommendations.first.title}');
   } catch (e) {
@@ -47,7 +47,7 @@ void main() async {
 
   print('\n--- Testing Video Detail ---');
   try {
-    final video = await client.getVideoDetail('lHhRhPV--G0');
+    final video = await client.getVideoDetail(videoId: 'lHhRhPV--G0');
     print('Video Title: ${video.title}');
     print('Author: ${video.author.name}');
     print('Views: ${video.views}');
@@ -58,7 +58,7 @@ void main() async {
   print('\n--- Testing Playlist Detail ---');
   try {
     final playlist = await client.getPlaylistDetail(
-      'PLjVLYmrlmjGfGLShoW0vVX_tcyT8u1Y3E',
+      playlistId: 'PLjVLYmrlmjGfGLShoW0vVX_tcyT8u1Y3E',
     );
     print('Playlist Title: ${playlist.title}');
     print('Total Video Count: ${playlist.totalVideoCount}');
@@ -70,7 +70,7 @@ void main() async {
 
   print('\n--- Testing Channel Detail ---');
   try {
-    final channel = await client.getChannelDetail('flutter');
+    final channel = await client.getChannelDetail(queryOrId: 'flutter');
     print('Channel Name: ${channel.name}');
     print('Channel URL: ${channel.url}');
   } catch (e) {

@@ -8,7 +8,8 @@ A powerful, high-performance Dart and Flutter package for fetching YouTube metad
 - 🔥 **Trending**: Fetch trending videos by category (Music, Gaming, etc.) and region.
 - 🔗 **Related Recommendations**: Get high-quality video recommendations for any YouTube video.
 - 📦 **Full Metadata**: Comprehensive information for videos, playlists, and channels.
-- ⚡ **Performance**: Optimized for speed with pagination support and localized IP options.
+- ⚡ **Performance**: Optimized for speed with "All results" single-request fetching and localized IP options.
+- 🚫 **Smart Filtering**: Automatic exclusion of Shorts (search) and short music segments (trending) on the server.
 - 🛠️ **Polymorphic Parsing**: Uses Dart Sealed Classes for effortless and type-safe results.
 
 ---
@@ -78,12 +79,13 @@ print(trending.videos.first.title);
 ```
 
 ### 3. `getRelated`
-Get video recommendations (More like this).
+Get video recommendations (More like this). Supports both Video ID and full URL.
 
 ```dart
 RelatedResponse related = await client.getRelated(
-  'videoIdhere',
-  page: 1,           // Optional page number
+  videoId: 'lHhRhPV--G0', // Optional ID
+  url: 'https://youtube.com/watch?v=...', // Or optional URL
+  page: 1,           // Legacy support
   ip: '1.1.1.1',     // Optional for localization
 );
 
@@ -92,10 +94,13 @@ print(related.recommendations.first.title);
 ```
 
 ### 4. `getVideoDetail`
-Fetch all metadata for a specific YouTube video.
+Fetch all metadata for a specific YouTube video. Supports Video ID or full URL.
 
 ```dart
-VideoDetail video = await client.getVideoDetail('videoIdhere');
+VideoDetail video = await client.getVideoDetail(
+  videoId: 'lHhRhPV--G0',
+  // url: '...'
+);
 
 print(video.title);
 print(video.description);
@@ -104,12 +109,12 @@ print(video.views);
 ```
 
 ### 5. `getPlaylistDetail`
-Fetch metadata and all videos from a playlist.
+Fetch metadata and all videos from a playlist. Supports Playlist ID or full URL.
 
 ```dart
 PlaylistDetail playlist = await client.getPlaylistDetail(
-  'playlistIdhere',
-  page: 1,           // Optional page number
+  playlistId: 'PLjVLYmrlmjGfGLShoW0vVX_tcyT8u1Y3E',
+  // url: '...'
 );
 
 print(playlist.title);
@@ -118,10 +123,13 @@ print(playlist.videos.first.title);
 ```
 
 ### 6. `getChannelDetail`
-Fetch high-quality channel metadata.
+Fetch high-quality channel metadata. Supports Query, ID, or full handle URL.
 
 ```dart
-ChannelDetail channel = await client.getChannelDetail('channelIdOrQuery');
+ChannelDetail channel = await client.getChannelDetail(
+  queryOrId: 'flutter',
+  // url: 'https://youtube.com/@flutterdev'
+);
 
 print(channel.name);
 print(channel.thumbnail);
@@ -152,6 +160,15 @@ for (var item in searchResult.all) {
   }
 }
 ```
+
+---
+
+## 🛡️ Server-Side Logic
+
+The API implements several premium features automatically:
+- **No Results Limits**: Most endpoints (Trending, Related, Playlist) return *all* available results in a single high-performance request.
+- **Shorts Exclusions**: YouTube Shorts (under 60s) are automatically excluded from search results.
+- **Music Segment Filtering**: In the `music` category for Trending, segments below **8 minutes** are automatically filtered out.
 
 ---
 
