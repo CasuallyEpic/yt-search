@@ -48,15 +48,22 @@ void main() async {
 ## 📖 API Reference
 
 ### 1. `search`
-Search for videos, playlists, channels, and more.
+Search for videos, playlists, channels, and more. To search exclusively for playlists or channels, use the `type` parameter!
 
 ```dart
+// General Search
 SearchResult result = await client.search(
   'flutter',
   page: 1,           // Optional page number
   type: 'video',     // Optional (video, playlist, channel, live, all)
   ip: '1.1.1.1',     // Optional for localized results
 );
+
+// Playlist Search (Finding playlists by query)
+SearchResult playlistSearch = await client.search('lofi', type: 'playlist');
+
+// Channel Search (Finding channels by query)
+SearchResult channelSearch = await client.search('flutter', type: 'channel');
 
 // Accessing results
 print(result.query);
@@ -108,13 +115,14 @@ print(video.author.name);
 print(video.views);
 ```
 
-### 5. `getPlaylistDetail`
-Fetch metadata and all videos from a playlist. Supports Playlist ID or full URL.
+### 5. `getPlaylistDetail` (Playlist Search)
+Fetch metadata and all videos from a playlist. This covers both `/api/playlist` and `/api/playlistsearch` aliases. Supports Playlist ID or full URL.
 
 ```dart
+// You can search by simply passing the playlist URL!
 PlaylistDetail playlist = await client.getPlaylistDetail(
   playlistId: 'PLjVLYmrlmjGfGLShoW0vVX_tcyT8u1Y3E',
-  // url: '...'
+  // url: 'https://youtube.com/playlist?list=PL...'
 );
 
 print(playlist.title);
@@ -122,10 +130,11 @@ print(playlist.totalVideoCount);
 print(playlist.videos.first.title);
 ```
 
-### 6. `getChannelDetail`
-Fetch high-quality channel metadata. Supports Query, ID, or full handle URL.
+### 6. `getChannelDetail` (Channel Search)
+Fetch high-quality channel metadata. This covers both `/api/channel` and `/api/channelsearch` aliases. Supports Query, ID, or full handle URL.
 
 ```dart
+// You can search by simply passing the channel name/handle or URL!
 ChannelDetail channel = await client.getChannelDetail(
   queryOrId: 'flutter',
   // url: 'https://youtube.com/@flutterdev'
